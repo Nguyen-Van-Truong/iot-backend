@@ -23,6 +23,6 @@ public class AccountController {
      */
     @GetMapping("/{id}")
     public AccountResponse getAccountById(@PathVariable Long id) {
-        return accountService.getAccountResponseById(id);  // Retrieve account details from the service
+        return accountService.getAccountResponseById(id);
     }
 }

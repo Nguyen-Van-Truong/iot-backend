@@ -6,6 +6,10 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+/**
+ * ExceptionResponse is used to return exception details.
+ * It includes the exception message and timestamp of the error.
+ */
 @Getter
 @Setter
 @AllArgsConstructor

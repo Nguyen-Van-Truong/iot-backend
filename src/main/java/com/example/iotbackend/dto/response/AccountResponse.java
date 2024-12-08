@@ -6,6 +6,10 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+/**
+ * AccountResponse is a DTO used to return account details.
+ * It includes account-related information such as ID, email, full name, phone number, role, and timestamps.
+ */
 @Getter
 @Setter
 @AllArgsConstructor

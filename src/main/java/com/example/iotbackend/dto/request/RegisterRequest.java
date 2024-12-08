@@ -6,6 +6,11 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * RegisterRequest represents the data required for user registration.
+ * It includes fields for email, password, full name, and optionally a phone number.
+ * The fields are validated with constraints like not blank, valid email format, and minimum password length.
+ */
 @Getter
 @Setter
 public class RegisterRequest {

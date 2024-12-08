@@ -6,6 +6,10 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+/**
+ * ErrorResponse is used to return error details to the client.
+ * It contains status code, message, timestamp, and additional error details.
+ */
 @Getter
 @Setter
 @AllArgsConstructor
