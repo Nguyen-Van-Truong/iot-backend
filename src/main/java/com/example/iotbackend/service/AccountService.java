@@ -1,15 +1,14 @@
 package com.example.iotbackend.service;
 
-import com.example.iotbackend.dto.request.LoginRequest;
-import com.example.iotbackend.dto.request.RegisterRequest;
-import com.example.iotbackend.dto.response.AccountResponse;
-import com.example.iotbackend.dto.response.RegisterResponse;
+import com.example.iotbackend.dto.request.*;
+import com.example.iotbackend.dto.response.*;
 import com.example.iotbackend.model.Account;
 
 /**
  * AccountService is the service interface that defines the operations related to user accounts.
  * It extends IService to provide basic CRUD operations for managing accounts, and adds
  * additional functionality specific to account authentication and registration.
+ * including authentication, registration, and password reset functionalities.
  */
 public interface AccountService extends IService<Account, Long> {
 
@@ -40,4 +39,28 @@ public interface AccountService extends IService<Account, Long> {
      * @throws BadRequestException if the registration fails due to invalid or duplicate data.
      */
     RegisterResponse register(RegisterRequest registerRequest);
+
+    /**
+     * Initiates the password reset process by generating an OTP and sending it to the user's email.
+     *
+     * @param forgotPasswordRequest The request containing the user's email.
+     * @return ForgotPasswordResponse A response message indicating that the OTP has been sent.
+     */
+    ForgotPasswordResponse initiateForgotPassword(ForgotPasswordRequest forgotPasswordRequest);
+
+    /**
+     * Verifies the OTP provided by the user.
+     *
+     * @param verifyOtpRequest The request containing the user's email and OTP.
+     * @return VerifyOtpResponse A response message indicating the result of the OTP verification.
+     */
+    VerifyOtpResponse verifyOtp(VerifyOtpRequest verifyOtpRequest);
+
+    /**
+     * Resets the user's password after successful OTP verification.
+     *
+     * @param resetPasswordRequest The request containing the user's email, OTP, and new password.
+     * @return ResetPasswordResponse A response message confirming the password reset.
+     */
+    ResetPasswordResponse resetPassword(ResetPasswordRequest resetPasswordRequest);
 }
