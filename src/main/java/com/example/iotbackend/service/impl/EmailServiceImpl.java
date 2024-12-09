@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,12 +22,13 @@ public class EmailServiceImpl implements EmailService {
     private String fromEmail;
 
     /**
-     * Sends an OTP email to the user.
+     * Sends an OTP email to the user asynchronously.
      *
      * @param toEmail The recipient's email address.
      * @param otp The OTP (One-Time Password) to be sent to the user.
      */
     @Override
+    @Async("taskExecutor")
     public void sendOtpEmail(String toEmail, String otp) {
         SimpleMailMessage message = new SimpleMailMessage();
         // Set the sender's email address
