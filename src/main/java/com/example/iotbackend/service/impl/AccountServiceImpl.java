@@ -3,7 +3,9 @@ package com.example.iotbackend.service.impl;
 import com.example.iotbackend.dto.request.*;
 import com.example.iotbackend.dto.response.*;
 import com.example.iotbackend.exception.BadRequestException;
+import com.example.iotbackend.exception.ConflictException;
 import com.example.iotbackend.exception.ResourceNotFoundException;
+import com.example.iotbackend.exception.UnauthorizedException;
 import com.example.iotbackend.model.Account;
 import com.example.iotbackend.model.PasswordReset;
 import com.example.iotbackend.repository.AccountRepository;
@@ -22,7 +24,6 @@ import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -48,21 +49,6 @@ public class AccountServiceImpl extends AbstractService<Account, Long> implement
     @Override
     protected JpaRepository<Account, Long> getRepository() {
         return accountRepository;
-    }
-
-    /**
-     * Retrieves all accounts from the database.
-     *
-     * @return A list of all accounts.
-     * @throws ResourceNotFoundException if no accounts are found in the database.
-     */
-    @Override
-    public List<Account> findAll() {
-        List<Account> accounts = getRepository().findAll();
-        if (accounts.isEmpty()) {
-            throw new ResourceNotFoundException("No accounts found in the database.");
-        }
-        return accounts;
     }
 
     /**
@@ -122,8 +108,8 @@ public class AccountServiceImpl extends AbstractService<Account, Long> implement
             // Generate and return a JWT token upon successful authentication
             return jwtService.generateToken(loginRequest.getEmail());
         } catch (AuthenticationException e) {
-            // Throw an exception if authentication fails due to invalid credentials
-            throw new BadRequestException("Invalid username or password");
+            // Throw UnauthorizedException if authentication fails due to invalid credentials
+            throw new UnauthorizedException("Invalid username or password");
         }
     }
 
@@ -133,14 +119,14 @@ public class AccountServiceImpl extends AbstractService<Account, Long> implement
      *
      * @param registerRequest The registration details.
      * @return A RegisterResponse indicating success and the ID of the newly created account.
-     * @throws BadRequestException if the email is already in use.
+     * @throws ConflictException if the email is already in use.
      */
     @Override
     @Transactional
     public RegisterResponse register(RegisterRequest registerRequest) {
         // Check if the email is already taken
         if (accountRepository.findByEmail(registerRequest.getEmail()).isPresent()) {
-            throw new BadRequestException("Email is already in use");
+            throw new ConflictException("Email is already in use");
         }
 
         // Create a new account with the provided details

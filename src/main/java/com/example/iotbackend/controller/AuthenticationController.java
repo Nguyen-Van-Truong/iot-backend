@@ -32,16 +32,8 @@ public class AuthenticationController {
      */
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
-        try {
-            String token = accountService.authenticate(loginRequest);  // Attempt to authenticate the user and generate a token
-            return ResponseEntity.ok(new LoginResponse("Login successful", token));
-        } catch (AuthenticationException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)  // Respond with 401 Unauthorized if authentication fails
-                    .body(new ExceptionResponse("Invalid username or password"));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)  // Respond with 400 Bad Request for other exceptions
-                    .body(new ExceptionResponse(e.getMessage()));
-        }
+        String token = accountService.authenticate(loginRequest);  // Attempt to authenticate the user and generate a token
+        return ResponseEntity.ok(new LoginResponse("Login successful", token));
     }
 
     /**
@@ -52,13 +44,8 @@ public class AuthenticationController {
      */
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest registerRequest) {
-        try {
-            RegisterResponse response = accountService.register(registerRequest);  // Attempt to register a new user
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);  // Respond with 201 Created if registration is successful
-        } catch (BadRequestException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)  // Respond with 400 Bad Request if registration fails due to a bad request
-                    .body(new ExceptionResponse(e.getMessage()));
-        }
+        RegisterResponse response = accountService.register(registerRequest);  // Attempt to register a new user
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);  // Respond with 201 Created if registration is successful
     }
 
     /**
@@ -70,16 +57,8 @@ public class AuthenticationController {
      */
     @PostMapping("/forgot-password")
     public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordRequest forgotPasswordRequest) {
-        try {
-            ForgotPasswordResponse response = accountService.initiateForgotPassword(forgotPasswordRequest);
-            return ResponseEntity.ok(response);
-        } catch (BadRequestException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ExceptionResponse(e.getMessage(), java.time.LocalDateTime.now()));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ExceptionResponse("An error occurred while processing the request.", java.time.LocalDateTime.now()));
-        }
+        ForgotPasswordResponse response = accountService.initiateForgotPassword(forgotPasswordRequest);
+        return ResponseEntity.ok(response);
     }
 
     /**
@@ -90,35 +69,19 @@ public class AuthenticationController {
      */
     @PostMapping("/verify-otp")
     public ResponseEntity<?> verifyOtp(@Valid @RequestBody VerifyOtpRequest verifyOtpRequest) {
-        try {
-            VerifyOtpResponse response = accountService.verifyOtp(verifyOtpRequest);
-            return ResponseEntity.ok(response);
-        } catch (BadRequestException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ExceptionResponse(e.getMessage(), java.time.LocalDateTime.now()));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ExceptionResponse("An error occurred while processing the request.", java.time.LocalDateTime.now()));
-        }
+        VerifyOtpResponse response = accountService.verifyOtp(verifyOtpRequest);
+        return ResponseEntity.ok(response);
     }
 
     /**
      * Endpoint to reset the user's password after successful OTP verification.
      *
-     * @param resetPasswordRequest The request containing the user's email, OTP, and new password.
+     * @param resetPasswordRequest The request containing the user's email  , OTP, and new password.
      * @return ResponseEntity containing a success message if the password is reset successfully.
      */
     @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPasswordRequest resetPasswordRequest) {
-        try {
-            ResetPasswordResponse response = accountService.resetPassword(resetPasswordRequest);
-            return ResponseEntity.ok(response);
-        } catch (BadRequestException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ExceptionResponse(e.getMessage(), java.time.LocalDateTime.now()));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ExceptionResponse("An error occurred while processing the request.", java.time.LocalDateTime.now()));
-        }
+        ResetPasswordResponse response = accountService.resetPassword(resetPasswordRequest);
+        return ResponseEntity.ok(response);
     }
 }
